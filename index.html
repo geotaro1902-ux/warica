@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WARICA - 割り勘アプリ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      body { font-family: 'Noto Sans JP', sans-serif; background: #f8f7ff; }
+      #root { min-height: 100vh; }
+      input:focus { outline: none; }
+      button:disabled { opacity: 0.4; cursor: not-allowed; }
+      ::-webkit-scrollbar { width: 0; }
+      @keyframes slideUp { from { transform: translateY(100%) } to { transform: translateY(0) } }
+      @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
