@@ -1,5 +1,5 @@
 // src/App.jsx
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Routes, Route, useNavigate, useParams } from "react-router-dom";
 import {
   collection, doc, addDoc, updateDoc, deleteDoc,
@@ -271,17 +271,21 @@ function GroupScreen() {
   const [copied, setCopied] = useState(false);
   const [showShareBanner, setShowShareBanner] = useState(false);
 
-  // 為替レート
+  // 為替レート（初回のみローディング表示、以降はバックグラウンド更新）
   const [rates, setRates] = useState(null);
   const [ratesLoading, setRatesLoading] = useState(true);
   const [ratesDate, setRatesDate] = useState(null);
+  const hasLoadedOnce = useRef(false);
 
   const loadRates = useCallback(async () => {
-    setRatesLoading(true);
+    if (!hasLoadedOnce.current) setRatesLoading(true);
     const r = await fetchRates();
-    setRates(r);
-    setRatesDate(r ? new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }) : null);
+    if (r) {
+      setRates(r);
+      setRatesDate(new Date().toLocaleString("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }));
+    }
     setRatesLoading(false);
+    hasLoadedOnce.current = true;
   }, []);
 
   useEffect(() => { loadRates(); }, [loadRates]);
@@ -716,7 +720,7 @@ function ExpenseModal({ open, onClose, members, initialData, onSave, rates }) {
       {/* 1人あたりプレビュー */}
       {canSave && (
         <div style={{ marginTop: 16, padding: "10px 14px", background: "#f8f7ff", borderRadius: 12, fontSize: 13, color: "#666", textAlign: "center" }}>
-          1人あたり ¥{Math.round(amountJPY / Math.max(participants.length || group?.members?.length || 1, 1)).toLocaleString()}
+          1人あたり ¥{Math.round(amountJPY / Math.max(participants.length || members.length || 1, 1)).toLocaleString()}
         </div>
       )}
 
